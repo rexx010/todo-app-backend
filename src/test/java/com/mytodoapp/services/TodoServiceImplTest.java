@@ -5,6 +5,7 @@ import com.mytodoapp.data.repositories.TodoRepository;
 import com.mytodoapp.data.repositories.UserRepository;
 import com.mytodoapp.dtos.reponses.TodoResponse;
 import com.mytodoapp.dtos.reponses.UserReponse;
+import com.mytodoapp.dtos.requests.MarkTaskRequest;
 import com.mytodoapp.dtos.requests.TodoRequest;
 import com.mytodoapp.dtos.requests.UserRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +46,6 @@ public class TodoServiceImplTest {
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
         todoRequest.setDescription("Watching movies is fun");
-        todoRequest.setStatus(Status.UNCHECKED);
         todoService.addTask(todoRequest, response.getId());
         assertEquals(1, todoRepository.count());
     }
@@ -62,7 +62,6 @@ public class TodoServiceImplTest {
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
         todoRequest.setDescription("Watching movies is fun");
-        todoRequest.setStatus(Status.UNCHECKED);
         todoService.addTask(todoRequest, response.getId());
         assertEquals(1, todoRepository.count());
 
@@ -76,7 +75,6 @@ public class TodoServiceImplTest {
         TodoRequest todoRequest2 = new TodoRequest();
         todoRequest2.setTitle("Watch Movies");
         todoRequest2.setDescription("Watching movies is fun");
-        todoRequest2.setStatus(Status.UNCHECKED);
         todoService.addTask(todoRequest, response2.getId());
         assertEquals(2, todoRepository.count());
     }
@@ -93,14 +91,12 @@ public class TodoServiceImplTest {
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
         todoRequest.setDescription("Watching movies is fun");
-        todoRequest.setStatus(Status.UNCHECKED);
         todoService.addTask(todoRequest, response.getId());
         assertEquals(1, todoRepository.count());
 
         TodoRequest todoRequest2 = new TodoRequest();
         todoRequest2.setTitle("Watch football");
         todoRequest2.setDescription("Watching football is fun");
-        todoRequest2.setStatus(Status.UNCHECKED);
         todoService.addTask(todoRequest2, response.getId());
         assertEquals(2, todoRepository.count());
 
@@ -120,18 +116,17 @@ public class TodoServiceImplTest {
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
         todoRequest.setDescription("Watching movies is fun");
-        todoRequest.setStatus(Status.UNCHECKED);
         todoService.addTask(todoRequest, response.getId());
         assertEquals(1, todoRepository.count());
 
         TodoRequest todoRequest2 = new TodoRequest();
         todoRequest2.setTitle("Watch ball");
         todoRequest2.setDescription("Watching football is fun");
-        todoRequest2.setStatus(Status.UNCHECKED);
         TodoResponse res = todoService.addTask(todoRequest2, response.getId());
         assertEquals(2, todoRepository.count());
-
-        TodoResponse res2 = todoService.markAsCompleted(res.getId(), response.getId());
+        MarkTaskRequest request = new MarkTaskRequest();
+        request.setTaskId(res.getId());
+        TodoResponse res2 = todoService.markAsCompleted(request, response.getId());
         assertEquals(Status.CHECKED, res2.getStatus());
     }
 }
