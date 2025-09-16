@@ -5,6 +5,7 @@ import com.mytodoapp.dtos.requests.TodoRequest;
 import com.mytodoapp.services.TodoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class TodoController {
     private TodoService todoService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addTask(@RequestBody TodoRequest todoRequest, HttpSession session){
+    public ResponseEntity<?> addTask(@Valid @RequestBody TodoRequest todoRequest, HttpSession session){
         String userId = (String) session.getAttribute("userId");
         if(userId == null){
             return ResponseEntity.status(401).body("Not logged in");
@@ -34,7 +35,7 @@ public class TodoController {
     }
 
     @PostMapping("/mark")
-    public ResponseEntity<?> markAsCompleted(@RequestBody MarkTaskRequest taskRequest, HttpSession session){
+    public ResponseEntity<?> markAsCompleted(@Valid @RequestBody MarkTaskRequest taskRequest, HttpSession session){
         String userId = (String) session.getAttribute("userId");
         if(userId == null){
             return ResponseEntity.status(401).body("Not logged in");
