@@ -127,7 +127,7 @@ public class TodoServiceImplTest {
         assertEquals(2, todoRepository.count());
         MarkTaskRequest request = new MarkTaskRequest();
         request.setTaskId(res.getId());
-        TodoResponse res2 = todoService.markAsCompleted(request, response.getId());
+        TodoResponse res2 = todoService.markAsCompleted(request.getTaskId(), response.getId());
         assertEquals(Status.CHECKED, res2.getStatus());
     }
 }
