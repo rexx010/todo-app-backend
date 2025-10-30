@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,9 +29,17 @@ public class AuthController {
                 .map(user -> {
                     session.setAttribute("userId", user.getId());
                     session.setAttribute("username", user.getUsername());
-                    return ResponseEntity.ok("login successful");
+
+                    Map<String, String> userMap = new HashMap<>();
+                    userMap.put("id", user.getId().toString());
+                    userMap.put("username", user.getUsername().toString());
+
+                    return ResponseEntity.ok().header("Authorization", session.getId()).body(userMap);
                 })
-                .orElse(ResponseEntity.status(401).body("Invalid credentials"));
+                .orElseGet(() -> {Map<String, String> errorMap = new HashMap<>();
+                    errorMap.put("error", "Invalid credentials");
+                    return ResponseEntity.status(401).body(errorMap);
+                });
     }
 
     @GetMapping("/me")
@@ -37,8 +48,10 @@ public class AuthController {
         if (userId == null) {
             return ResponseEntity.status(401).body("Not logged in");
         }
-        return ResponseEntity.ok("Logged in as userId: " + userId +
-                ", username: " + session.getAttribute("username"));
+        Map<String, String> user = new HashMap<>();
+        user.put("id", userId);
+        user.put("username", session.getAttribute("username").toString() );
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/logout")

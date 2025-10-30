@@ -8,6 +8,7 @@ import com.mytodoapp.data.repositories.UserRepository;
 import com.mytodoapp.dtos.reponses.TodoResponse;
 import com.mytodoapp.dtos.requests.MarkTaskRequest;
 import com.mytodoapp.dtos.requests.TodoRequest;
+import com.mytodoapp.dtos.requests.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,29 +45,57 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public List<TodoResponse> getAllTodoTasks(String userId) {
-        List<TodoResponse> responses = new ArrayList<>();
+    public List<Todo> getAllTodoTasks(String userId) {
+//        List<TodoResponse> responses = new ArrayList<>();
         List<Todo> response = todoRepository.findByUserId(userId);
-        for(Todo todo: response){
-            TodoResponse todoResponse = new TodoResponse();
-            todoResponse.setDescription(todo.getDescription());
-            todoResponse.setTitle(todo.getTitle());
-            todoResponse.setId(todo.getId());
-            todoResponse.setDateAdded(todo.getDateAdded());
-            todoResponse.setStatus(todo.getStatus());
-            responses.add(todoResponse);
-        }
-        return responses;
+//        for(Todo todo: response){
+//            TodoResponse todoResponse = new TodoResponse();
+//            todoResponse.setDescription(todo.getDescription());
+//            todoResponse.setTitle(todo.getTitle());
+//            todoResponse.setId(todo.getId());
+//            todoResponse.setDateAdded(todo.getDateAdded());
+//            todoResponse.setStatus(todo.getStatus());
+//            responses.add(todoResponse);
+//        }
+        return response;
     }
 
     @Override
-    public TodoResponse markAsCompleted(MarkTaskRequest taskRequest, String userId) {
-        Todo todo = todoRepository.findById(taskRequest.getTaskId())
+    public List<Todo> getAllInCompletedTask(String userId) {
+        List<Todo> seperated = new ArrayList<>();
+        List<Todo> Incomplete = todoRepository.findByUserId(userId);
+        for(Todo task: Incomplete){
+            if(task.getStatus().equals(Status.UNCHECKED)){
+                seperated.add(task);
+            }
+        }
+        return seperated;
+    }
+
+    @Override
+    public List<Todo> getAllCompletedTask(String userId) {
+        List<Todo> division = new ArrayList<>();
+        List<Todo> completed = todoRepository.findByUserId(userId);
+        for(Todo task: completed){
+            if(task.getStatus().equals(Status.CHECKED)){
+                division.add(task);
+            }
+        }
+        return division;
+    }
+
+    @Override
+    public TodoResponse markAsCompleted(String taskId, String userId) {
+        Todo todo = todoRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         if(!todo.getUser().getId().equals(userId)){
             throw new RuntimeException("Task not found");
         }
-        todo.setStatus(Status.CHECKED);
+        if (todo.getStatus() == Status.CHECKED) {
+            todo.setStatus(Status.UNCHECKED);
+        } else {
+            todo.setStatus(Status.CHECKED);
+        }
         Todo updated = todoRepository.save(todo);
         TodoResponse todoResponse = new TodoResponse();
         todoResponse.setId(updated.getId());
@@ -75,5 +104,35 @@ public class TodoServiceImpl implements TodoService{
         todoResponse.setDateAdded(updated.getDateAdded());
         todoResponse.setStatus(updated.getStatus());
         return todoResponse;
+    }
+
+    @Override
+    public void deleteTask(String taskId, String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Todo todo = todoRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        if (!todo.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not allowed to delete this task");
+        }
+
+        todoRepository.deleteById(taskId);
+    }
+
+    public TodoResponse updateTask(String taskId, UpdateRequest request, String userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Todo todo = todoRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        todo.setTitle(request.getTitle());
+        todo.setDescription(request.getDescription());
+        Todo saved = todoRepository.save(todo);
+        TodoResponse response = new TodoResponse();
+        response.setId(saved.getId());
+        response.setTitle(saved.getTitle());
+        response.setDescription(saved.getDescription());
+        response.setDateAdded(saved.getDateAdded());
+        response.setStatus(saved.getStatus());
+        return response;
     }
 }

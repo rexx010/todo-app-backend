@@ -1,6 +1,7 @@
 package com.mytodoapp.services;
 
 import com.mytodoapp.data.models.Status;
+import com.mytodoapp.data.models.Todo;
 import com.mytodoapp.data.repositories.TodoRepository;
 import com.mytodoapp.data.repositories.UserRepository;
 import com.mytodoapp.dtos.reponses.TodoResponse;
@@ -100,7 +101,7 @@ public class TodoServiceImplTest {
         todoService.addTask(todoRequest2, response.getId());
         assertEquals(2, todoRepository.count());
 
-        List<TodoResponse> res = todoService.getAllTodoTasks(response.getId());
+        List<Todo> res = todoService.getAllTodoTasks(response.getId());
         assertEquals(2, res.size());
     }
 
