@@ -2,15 +2,13 @@ package com.mytodoapp.services;
 
 import com.mytodoapp.data.models.User;
 import com.mytodoapp.data.repositories.UserRepository;
-import com.mytodoapp.dtos.reponses.UserReponse;
+import com.mytodoapp.dtos.reponses.UserResponse;
 import com.mytodoapp.dtos.requests.LoginRequest;
 import com.mytodoapp.dtos.requests.UserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +41,7 @@ public class UserServiceImplTest {
         userRequest.setEmail("grexx200@gmail.com");
         userRequest.setPassword("12345");
 
-        UserReponse response = userService.registeredUser(userRequest);
+        UserResponse response = userService.registeredUser(userRequest);
         assertEquals("Rexx01", response.getUsername());
         assertEquals("grexx200@gmail.com", response.getEmail());
     }
