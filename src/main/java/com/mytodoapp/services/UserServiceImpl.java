@@ -2,7 +2,7 @@ package com.mytodoapp.services;
 
 import com.mytodoapp.data.models.User;
 import com.mytodoapp.data.repositories.UserRepository;
-import com.mytodoapp.dtos.reponses.UserReponse;
+import com.mytodoapp.dtos.reponses.UserResponse;
 import com.mytodoapp.dtos.requests.LoginRequest;
 import com.mytodoapp.dtos.requests.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(14);
 
     @Override
-    public UserReponse registeredUser(UserRequest userRequest) {
+    public UserResponse registeredUser(UserRequest userRequest) {
         if(userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             throw new RuntimeException("User with this email already exists");
         }
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService{
         user.setEmail(userRequest.getEmail());
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         User savedUser = userRepository.save(user);
-        UserReponse userReponse = new UserReponse();
+        UserResponse userReponse = new UserResponse();
         userReponse.setId(savedUser.getId());
         userReponse.setUsername(savedUser.getUsername());
         userReponse.setEmail(savedUser.getEmail());
