@@ -39,9 +39,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<User> login(LoginRequest loginRequest) {
-        return userRepository.findByUsername(loginRequest.getUsername())
-                .filter(user -> passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()));
+    public User login(LoginRequest loginRequest) {
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new RuntimeException("Username not found"));
+        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return user;
+        } else {
+            throw new RuntimeException("Incorrect password");
+        }
+
+//        return userRepository.findByUsername(loginRequest.getUsername())
+//                .filter(user -> passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()));
     }
 
     @Override

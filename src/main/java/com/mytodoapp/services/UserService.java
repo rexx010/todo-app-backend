@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserService {
     UserResponse registeredUser(UserRequest userRequest);
-    Optional<User> login(LoginRequest loginRequest);
+    User login(LoginRequest loginRequest);
     Optional<User> getUserById(String id);
     void deleteById(String id);
 }
