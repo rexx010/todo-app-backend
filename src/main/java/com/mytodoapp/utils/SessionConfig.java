@@ -14,7 +14,7 @@ public class SessionConfig {
             servletContext.getSessionCookieConfig().setName("JSESSIONID");
             servletContext.getSessionCookieConfig().setPath("/");
             servletContext.getSessionCookieConfig().setHttpOnly(true);
-            servletContext.getSessionCookieConfig().setSecure(false);
+            servletContext.getSessionCookieConfig().setSecure(true);
         };
     }
 
