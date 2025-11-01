@@ -9,6 +9,6 @@ public class CookieConfig {
     @Bean
     public CookieSameSiteSupplier cookieSameSiteSupplier() {
         // This makes Spring Boot add SameSite=None to JSESSIONID cookies
-        return CookieSameSiteSupplier.ofLax();
+        return CookieSameSiteSupplier.ofNone();
     }
 }
