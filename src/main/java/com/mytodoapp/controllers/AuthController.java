@@ -1,5 +1,6 @@
 package com.mytodoapp.controllers;
 
+import com.mytodoapp.data.models.User;
 import com.mytodoapp.dtos.requests.LoginRequest;
 import com.mytodoapp.dtos.requests.UserRequest;
 import com.mytodoapp.services.UserService;
@@ -25,21 +26,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpSession session){
-        return userService.login(loginRequest)
-                .map(user -> {
-                    session.setAttribute("userId", user.getId());
-                    session.setAttribute("username", user.getUsername());
+        User user = userService.login(loginRequest); // No longer Optional
 
-                    Map<String, String> userMap = new HashMap<>();
-                    userMap.put("id", user.getId().toString());
-                    userMap.put("username", user.getUsername().toString());
+        session.setAttribute("userId", user.getId());
+        session.setAttribute("username", user.getUsername());
 
-                    return ResponseEntity.ok().header("Authorization", session.getId()).body(userMap);
-                })
-                .orElseGet(() -> {Map<String, String> errorMap = new HashMap<>();
-                    errorMap.put("error", "Invalid credentials");
-                    return ResponseEntity.status(401).body(errorMap);
-                });
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("id", user.getId().toString());
+        userMap.put("username", user.getUsername());
+
+        return ResponseEntity.ok().header("Authorization", session.getId()).body(userMap);
     }
 
     @GetMapping("/me")
