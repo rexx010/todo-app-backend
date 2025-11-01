@@ -5,7 +5,7 @@ import com.mytodoapp.data.models.Todo;
 import com.mytodoapp.data.repositories.TodoRepository;
 import com.mytodoapp.data.repositories.UserRepository;
 import com.mytodoapp.dtos.reponses.TodoResponse;
-import com.mytodoapp.dtos.reponses.UserReponse;
+import com.mytodoapp.dtos.reponses.UserResponse;
 import com.mytodoapp.dtos.requests.MarkTaskRequest;
 import com.mytodoapp.dtos.requests.TodoRequest;
 import com.mytodoapp.dtos.requests.UserRequest;
@@ -42,7 +42,7 @@ public class TodoServiceImplTest {
         userRequest.setEmail("grex200@gmail.com");
         userRequest.setPassword("12345");
 
-        UserReponse response = userService.registeredUser(userRequest);
+        UserResponse response = userService.registeredUser(userRequest);
 
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
@@ -58,7 +58,7 @@ public class TodoServiceImplTest {
         userRequest.setEmail("r@gmail.com");
         userRequest.setPassword("12345");
 
-        UserReponse response = userService.registeredUser(userRequest);
+        UserResponse response = userService.registeredUser(userRequest);
 
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
@@ -71,7 +71,7 @@ public class TodoServiceImplTest {
         userRequest2.setEmail("x20@gmail.com");
         userRequest2.setPassword("12345");
 
-        UserReponse response2 = userService.registeredUser(userRequest2);
+        UserResponse response2 = userService.registeredUser(userRequest2);
 
         TodoRequest todoRequest2 = new TodoRequest();
         todoRequest2.setTitle("Watch Movies");
@@ -87,7 +87,7 @@ public class TodoServiceImplTest {
         userRequest.setEmail("fiim@gmail.com");
         userRequest.setPassword("12345");
 
-        UserReponse response = userService.registeredUser(userRequest);
+        UserResponse response = userService.registeredUser(userRequest);
 
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
@@ -112,7 +112,7 @@ public class TodoServiceImplTest {
         userRequest.setEmail("segzz@gmail.com");
         userRequest.setPassword("12345");
 
-        UserReponse response = userService.registeredUser(userRequest);
+        UserResponse response = userService.registeredUser(userRequest);
 
         TodoRequest todoRequest = new TodoRequest();
         todoRequest.setTitle("Watch Movies");
