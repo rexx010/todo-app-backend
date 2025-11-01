@@ -47,9 +47,6 @@ public class UserServiceImpl implements UserService{
         } else {
             throw new RuntimeException("Incorrect password");
         }
-
-//        return userRepository.findByUsername(loginRequest.getUsername())
-//                .filter(user -> passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()));
     }
 
     @Override
