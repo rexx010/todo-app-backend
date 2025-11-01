@@ -1,11 +1,21 @@
-# Use a lightweight JDK image
-FROM openjdk:24-jdk-slim
-
-# Set working directory inside container
+# Stage 1: Build the application
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy the JAR file from Maven build output
-COPY target/*.jar app.jar
+# Copy pom.xml and download dependencies (cached layer)
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source code and build
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the application
+FROM openjdk:24-jdk-slim
+WORKDIR /app
+
+# Copy the JAR from the build stage
+COPY --from=build /app/target/*.jar app.jar
 
 # Expose your Spring Boot port
 EXPOSE 8080
